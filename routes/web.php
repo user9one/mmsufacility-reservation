@@ -29,9 +29,9 @@ Route::get('/services', [ServicesController::class, 'fetchServices']); //fetch s
 
 Route::get('/list-facilities', [FacilitiesController::class, 'loadFacilities']); //fetch facilities para idjy facilities a page haha
 
-//fetching facility details (for the reservation idjy facility_name)
-Route::get('/list-facilities/{id}', [FacilitiesController::class, 'getFacilityDetails']); 
 
+Route::get('/list-facilities/{id}', [FacilitiesController::class, 'getFacilityDetails']); //fetching facility details (for the reservation idjy facility_name)
+Route::get('/facility-pricing/{id}', [FacilitiesController::class, 'getFacilityPricing']);//fetching facility price whatever 
 
 //SUBMIT THE RESERVATION or something, yeah haha
 Route::post('/save-client', [ClientController::class, 'saveClient']);

@@ -34,8 +34,6 @@ class FacilitiesController extends Controller
             return $facilities;
         }
 
-
-
         //For the Reservation
         public function getFacilityDetails($id)
                 {
@@ -47,4 +45,17 @@ class FacilitiesController extends Controller
                 
                     return response()->json($facility);
                 }
+
+//--------------------------------------------------------------------------//
+
+                public function getFacilityPricing($id)
+                    {
+                        $facility = Facility::with('prices')->find($id);
+
+                        if (!$facility) {
+                            return response()->json(['error' => 'Facility not found'], 404);
+                        }
+
+                        return response()->json($facility->prices); // Return the pricing details for the facility
+                    }
 }

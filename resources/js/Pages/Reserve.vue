@@ -1,14 +1,16 @@
 <template>
-  <div>
-    <header>
-      <!-- <Navbar /> -->
+  <div >
+    <header class="bg-green-700 p-4 text-white text-center">
+      <!-- Header Content -->
+      <h1 class="text-xl font-bold">REQUEST FOR RESERVATION OF FACILITIES AND SERVICES</h1>
     </header>
     <div class="reservation-form"> 
       <form @submit.prevent="submitReservation">
         <!-- Step 1: Location and Event Information -->
+
         <div v-show="currentStep === 1">
-            <h2>Event Information</h2>
-            <table>
+            <h2 class="font-bold text-lg mb-4">Event Information</h2>
+            <table class="shadow-md bg-white rounded-lg overflow-hidden border border-gray-300">
               <tr>
                 <td>Facility Name:</td>
                 <td>{{ selectedFacility ? selectedFacility.facility_name : 'No facility selected' }}</td>
@@ -44,59 +46,18 @@
               
             </table>
           <!-- Navigation buttons -->
-                      <div>
-                      <button @click.prevent="cancelReservation">Cancel</button>
-                      <button @click.prevent="nextStep">Next</button>
-                      </div>
+                      <div class="mt-2">
+                      <button @click.prevent="cancelReservation" class="mr-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Cancel</button>
+                      <button @click.prevent="nextStep" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Next</button>
+                    </div>
         </div>
     
         <!-- Step 2: Services -->
         <div v-show="currentStep === 2">
-          <h2>Services</h2>
-          <!-- <table>
-            <thead>
-              <tr>
-                <th>Service Name</th>
-                <th>Yes</th>
-                <th>No</th>
-                <th v-if="selectedServiceHasQuantity">Quantity</th>
-                <th v-if="selectedServiceHasRemarks">Remarks</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(service, index) in services" :key="index">
-                <td>{{ service.service_name }}</td>
-                <td>
-                  <input
-                    type="radio"
-                    v-model="selectedServices[service.id].chosenYes"
-                    :value="true"
-                  >
-                </td>
-                <td>
-                  <input
-                    type="radio"
-                    v-model="selectedServices[service.id].chosenNo"
-                    :value="true"
-                  >
-                </td>
-                <td v-if="selectedServiceHasQuantity">
-                  <input
-                    type="number"
-                    v-model="selectedServices[service.id].quantity"
-                  >
-                </td>
-                <td v-if="selectedServiceHasRemarks">
-                  <input
-                    type="text"
-                    v-model="selectedServices[service.id].remarks"
-                  >
-                </td>
-              </tr>
-            </tbody>
-          </table> -->
-
-          <table>
+          <h2 class="font-bold text-lg mb-4">Do you want to avail any of the Services? </h2>
+          <h5>(Click Yes to avail)</h5>
+          <br>
+          <table class="shadow-md bg-white rounded-lg overflow-hidden border border-gray-300">
             <thead>
               <tr>
                 <th>Services</th>
@@ -131,20 +92,18 @@
             </tbody>
           </table>
 
-
-
           <!-- Navigation buttons -->
-                  <div>
-                      <button @click.prevent="prevStep">Previous</button>
-                      <button @click.prevent="nextStep">Next</button>
-                  </div>
+          <div class="mt-2">
+            <button @click.prevent="prevStep" class="mr-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Previous</button>
+            <button @click.prevent="nextStep" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Next</button>
+          </div>
          </div>
     
         <!-- Step 3: Contact Information -->
         <div v-show="currentStep === 3">
           <!-- Contact Information fields -->
-          <h2>Contact Information</h2>
-          <table>
+          <h2 class="font-bold text-lg mb-4">Contact Information</h2>
+          <table class="shadow-md bg-white rounded-lg overflow-hidden border border-gray-300">
               <tr>
                   <td><label for="fname">First Name:</label></td>
                   <td><input type="text" id="fname" v-model="contactInfo.fname"></td>
@@ -170,8 +129,8 @@
                   <td><input type="tel" id="phone" v-model="contactInfo.phone"></td>
               </tr>
               <tr>
-                  <td><label for="affiliated">MMSU Affiliated:</label></td>
-                  <td><input type="checkbox" id="affiliated" v-model="contactInfo.mmsu_affiliated"></td>
+                <td><label for="affiliated">MMSU Affiliated:</label></td>
+                <td><input type="checkbox" id="affiliated" v-model="contactInfo.mmsu_affiliated" @change="handleAffiliatedChange"></td>
               </tr>
               <tr v-if="contactInfo.mmsu_affiliated">
                  
@@ -192,35 +151,45 @@
               </tr>
           </table>
           <!-- Navigation buttons -->
-                  <div>
-                      <button @click.prevent="prevStep">Previous</button>
-                      <button @click.prevent="nextStep">Next</button>
-                  </div>
+          <div class="mt-2">
+            <button @click.prevent="prevStep" class="mr-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Previous</button>
+            <button @click.prevent="nextStep" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Next</button>
+          </div>
         </div>
     
 
         <div v-show="currentStep === 4">
           <!-- Content for Step 4 -->
           <!-- Reservation Details -->
-              <h2>Reservation Details</h2>
+              <h2 class="font-bold text-lg mb-4">Reservation Details</h2>
                 <p>Facility: {{ selectedFacility.facility_name }}</p>
                 <p>Purpose: {{ purpose }}</p>
                 <p>Event Date: {{ eventDateFrom }} - {{ eventDateTo }}</p>
                 <p>Selected Time: {{ formatTime(startTime) }} - {{ formatTime(endTime) }}</p>
                 <p>Event Name: {{ event_name }}</p>
                 <p>Participants: {{ participants }}</p>
-                <p>Total Price: {{ totalPrice }}</p>
+                <!-- <p>Total Price: {{ totalPrice }}</p> -->
+                <p>Estimated Total Price: {{ estimatedTotal }}</p>
              <br>
               <!-- Services Availed -->
+              <h2 class="font-bold text-lg mb-4">Services Availed</h2>
               
+                <!-- Display services availed hereeee -->
+                <ul>
+                  <li v-for="(selectedService, index) in getSelectedServices()" :key="index">
+                    {{ selectedService.service_name }} - <b>Quantity:</b> {{ selectedService.quantity }} |  <b>Remarks:</b> {{ selectedService.additionalRequest }}
+                  </li>
+                </ul>
+              
+              <br>        
               <!-- Contact Information -->
-                <h2>Contact Information</h2>
-                <p>University ID: {{ contactInfo.university_id }}</p>
+                <h2 class="font-bold text-lg mb-4">Contact Information</h2>
                 <p>Name: {{ contactInfo.fname }} {{ contactInfo.mname }} {{ contactInfo.lname }}</p>
                 <p>Address: {{ contactInfo.address }}</p>
                 <p>Email: {{ contactInfo.email }}</p>
                 <p>Contact Number: {{ contactInfo.phone }}</p>
                 <div v-if="contactInfo.mmsu_affiliated">
+                  <p>University ID: {{ contactInfo.university_id }}</p>
                   <p>College Name: {{ contactInfo.college }}</p>
                   <p>Department Name: {{ contactInfo.department }}</p>
                 </div>
@@ -232,11 +201,14 @@
                   including the potential transfer of my personal information to MMSU affiliates and third-party service providers for the purposes outlined in the policy.</p>
               </div>
           <!-- Navigation buttons -->
-                  <div>
-                      <button @click.prevent="prevStep">Previous</button>
-                      <button type="submit">Submit</button>
-                  </div>
-      </div>
+
+                  <div class="mt-2">
+                  <button @click.prevent="prevStep" class="mr-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Previous</button>
+                  <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded">Submit</button>
+                </div>
+      
+        </div>
+
       </form>
     </div>
     <!-- <Footer /> -->
@@ -257,7 +229,7 @@ export default {
    data() {
       return {// Assign the facilityId received as a prop
           currentStep: 1,
-          selectedFacility: '',
+          selectedFacility: '', //null?
           purpose: '',
           eventDateFrom: '',
           eventDateTo: '',
@@ -265,7 +237,9 @@ export default {
           endTime: '',
           event_name: '',
           participants: 0,
-          totalPrice: 0,
+          totalPrice: 0, // Ty maisave ta database kuma nga total? idk
+
+          estimatedTotal: 0, //or etoy ti maisave ty estimation na haha
         
 
           services: [], // Fetch services from the backend and populate here
@@ -290,37 +264,81 @@ export default {
 
       };
     },
-    computed: {
-      selectedServiceHasQuantity() {
-            if (this.services.length === 0) {
-              return false; // No services fetched yet, assume no quantity field
-            }
+    // computed: {
+    //   selectedServiceHasQuantity() {
+    //         if (this.services.length === 0) {
+    //           return false; // No services fetched yet, assume no quantity field
+    //         }
 
-            // Check if the first service (you can adjust this logic as needed) has a quantity field
-            const firstService = this.services[0];
-            return 'quantity' in firstService; // Returns true if 'quantity' exists in the service data, false otherwise
-          },
+    //         // Check if the first service (you can adjust this logic as needed) has a quantity field
+    //         const firstService = this.services[0];
+    //         return 'quantity' in firstService; // Returns true if 'quantity' exists in the service data, false otherwise
+    //       },
 
-      selectedServiceHasRemarks() {
-            if (this.services.length === 0) {
-              return false; // No services fetched yet, assume no remarks field
-            }
+    //   selectedServiceHasRemarks() {
+    //         if (this.services.length === 0) {
+    //           return false; // No services fetched yet, assume no remarks field
+    //         }
 
-            // Check if the first service (you can adjust this logic as needed) has a remarks field
-            const firstService = this.services[0];
-            return 'remarks' in firstService; // Returns true if 'remarks' exists in the service data, false otherwise
-          },
-  },
+    //         // Check if the first service (you can adjust this logic as needed) has a remarks field
+    //         const firstService = this.services[0];
+    //         return 'remarks' in firstService; // Returns true if 'remarks' exists in the service data, false otherwise
+    //       },
+    //   },
 
     methods: {
-
-            // async fetchServices(){
-            //     const response = await axios.get('/services');
-            //     this.services = response.data;
-          
-            // },
-
            
+//-------------------------------------------------------------------------------------//
+            async fetchFacilityPricing() {
+                    try {
+                      const response = await axios.get(`/facility-pricing/${this.facilityId}`);
+                      // Assuming response.data contains the pricing details for the selected facility
+                      this.facilityPrice = response.data;
+                    } catch (error) {
+                      console.error('Error fetching facility pricing:', error);
+                    }
+                  },
+
+            calculateEstimatedTotal() {
+                  if (this.selectedFacility && this.startTime && this.endTime) {
+                    const facilityPrice = this.selectedFacility.facilityPrices.find(
+                      (price) => price.hours === this.selectedFacility.hours
+                    );
+
+                    if (facilityPrice) {
+                      const start = new Date(`2000-01-01 ${this.startTime}`);
+                      const end = new Date(`2000-01-01 ${this.endTime}`);
+                      const hours = Math.abs(end - start) / 36e5;
+
+                      const pricePerHour = facilityPrice.amount;
+                      const estimatedTotal = hours * pricePerHour;
+
+                      this.estimatedTotal = estimatedTotal;
+                    }
+                  }
+                },
+                watch: {
+                startTime() {
+                  this.calculateEstimatedTotal();
+                },
+                endTime() {
+                  this.calculateEstimatedTotal();
+                },
+                selectedFacility() {
+                  this.calculateEstimatedTotal();
+                },
+              },
+//-------------------------------------------------------------------------------------//
+
+            handleAffiliatedChange() {
+                if (!this.contactInfo.mmsu_affiliated) {
+                  // Reset affiliated fields to empty or null
+                  this.contactInfo.university_id = '';
+                  this.contactInfo.college = '';
+                  this.contactInfo.department = '';
+                }
+              },
+
             cancelReservation() {
             // Redirect to /facilities when canceled
             this.$router.push('/facilities');
@@ -389,7 +407,7 @@ export default {
      async submitReservation() {
               const mmsu_affiliated_value = this.contactInfo.mmsu_affiliated ? 1 : 0;
               const selectedServices = this.services.filter((service, index) => this.serviceSelection[index]);
-            // Prepare client data
+
               try{
                      const clientData = {
                           fname: this.contactInfo.fname,
@@ -444,7 +462,7 @@ export default {
                                   }
                       },
 
-
+//-------------------------------------------------------------------------------------------------------------------------//
                               toggleFields(index, value) {
                                   // Reset quantities and remarks when changing selection
                                   if (value === 'No') {
@@ -469,6 +487,28 @@ export default {
                                   this.remarks = new Array(this.services.length).fill(null);
                                 },
 
+                                getSelectedServices() {
+                                  const selectedServices = [];
+                                  this.services.forEach((service, index) => {
+                                    if (this.serviceSelection[index] === 'Yes') {
+                                      const quantity = this.quantities[index] !== null ? this.quantities[index] : 'None';
+                                      const tempRemarks = this.remarks[index] !== null ? this.remarks[index] : '';
+                                      
+                                      // Check if remarks were an empty string (typed and then erased)
+                                      const remarks = tempRemarks.trim() === '' ? 'None' : tempRemarks;
+                                      
+                                      selectedServices.push({
+                                        service_name: service.service_name,
+                                        chosen: this.serviceSelection[index],
+                                        quantity,
+                                        additionalRequest: remarks,
+                                        total_price: service.fee * (quantity !== 'None' ? quantity : 1),
+                                      });
+                                    }
+                                  });
+                                  return selectedServices;
+                                },
+   
 
 
 
