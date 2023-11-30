@@ -11,7 +11,7 @@ class Price extends Model
 
     protected $table = 'facility_prices'; // Table name
 
-    protected $fillable = ['facility_id', 'amount', 'hours', 'monthFrom', 'monthTo'];
+    protected $fillable = ['facility_id', 'amount', 'hours', 'timePeriod', 'monthFrom', 'monthTo'];
 
     public function facility()
     {

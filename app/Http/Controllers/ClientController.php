@@ -26,6 +26,7 @@ class ClientController extends Controller
          $client->university_id = $request->university_id; //maybe a unique identifier?? idk
          $client->college = $request->college;
          $client->department = $request->department;
+         $client->officeAgency = $request->officeAgency;
  
          // Save the client
          $client->save();

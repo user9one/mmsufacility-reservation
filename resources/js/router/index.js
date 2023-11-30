@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from "../Pages/Home.vue";
 import Facilities from "../Pages/Facilities.vue";
+import ViewMore from "../Pages/ViewMore.vue";
 import About from "../Pages/About.vue";
 import Contact from "../Pages/Contact.vue";
 import Reserve from "../Pages/Reserve.vue";
@@ -49,7 +50,11 @@ const router = createRouter({
       props: true, // Allow route.params as props in the component
 
     },
-
+    {
+      path: '/viewmore/:facilityId',
+      name: 'viewmore',
+      component: ViewMore,
+    },
     {
       path: '/thank-you',
       name: 'thank-you',

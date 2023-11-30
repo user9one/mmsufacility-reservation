@@ -21,6 +21,7 @@ class Client extends Model
         'university_id',
         'college',
         'department',
+        'officeAgency',
     ];
 
     // Define relationships

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class FacilityPrice extends Model
 {
-    protected $fillable = ['facility_id', 'amount', 'monthFrom', 'monthTo', 'hours'];
+    protected $fillable = ['facility_id', 'amount', 'monthFrom', 'monthTo', 'hours', 'timePeriod'];
 
     protected $table = 'facility_prices';
 

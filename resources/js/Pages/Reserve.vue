@@ -128,27 +128,72 @@
                   <td><label for="phone">Phone:</label></td>
                   <td><input type="tel" id="phone" v-model="contactInfo.phone"></td>
               </tr>
-              <tr>
-                <td><label for="affiliated">MMSU Affiliated:</label></td>
-                <td><input type="checkbox" id="affiliated" v-model="contactInfo.mmsu_affiliated" @change="handleAffiliatedChange"></td>
-              </tr>
-              <tr v-if="contactInfo.mmsu_affiliated">
+              <!-- <tr>
+              <td><label for="affiliated">MMSU Affiliated:</label></td>
+              <td colspan="2">
+                <div style="display: flex; align-items: center;">
+                  <label for="affiliatedYes" style="margin-right: 10px; margin-left: 10px;" >Yes</label>
+                  <input type="radio" id="affiliatedYes" value="Yes" v-model="contactInfo.mmsu_affiliated">
+                  
+                  <label for="affiliatedNo" style="margin-left: 15px;">No</label>
+                  <input type="radio" id="affiliatedNo" value="No" v-model="contactInfo.mmsu_affiliated">
                  
-                   <td colspan="2"><b>If you are affiliated with the university, please provide the following: </b></td>
+                </div>
+              </td>
+            </tr>
 
-              </tr>
-              <tr v-if="contactInfo.mmsu_affiliated">
-                  <td><label for="university_id">University ID (Student Number or Employee Number): </label></td>
-                  <td><input type="text" id="university_id" v-model="contactInfo.university_id"></td>
-              </tr>
-              <tr v-if="contactInfo.mmsu_affiliated">
-                  <td><label for="college">College Name:</label></td>
-                  <td><input type="text" id="college" v-model="contactInfo.college"></td>
-              </tr>
-              <tr v-if="contactInfo.mmsu_affiliated">
-                  <td><label for="department">Office or Department Name:</label></td>
-                  <td><input type="text" id="department" v-model="contactInfo.department"></td>
-              </tr>
+            <tr v-if="contactInfo.mmsu_affiliated === 'Yes'">
+              <td colspan="2"><b>If you are affiliated with the university, please provide the following: </b></td>
+            </tr>
+            <tr v-if="contactInfo.mmsu_affiliated === 'Yes'">
+              <td><label for="university_id">University ID (Student Number or Employee Number): </label></td>
+              <td><input type="text" id="university_id" v-model="contactInfo.university_id"></td>
+            </tr>
+            <tr v-if="contactInfo.mmsu_affiliated === 'Yes'">
+              <td><label for="college">College Name:</label></td>
+              <td><input type="text" id="college" v-model="contactInfo.college"></td>
+            </tr>
+            <tr v-if="contactInfo.mmsu_affiliated === 'Yes'">
+              <td><label for="department">Office or Department Name:</label></td>
+              <td><input type="text" id="department" v-model="contactInfo.department"></td>
+            </tr>
+            <tr v-if="contactInfo.mmsu_affiliated === 'No'">
+              <td><label for="officeAgency">Office/Agency:</label></td>
+              <td><input type="text" id="officeAgency" v-model="contactInfo.officeAgency"></td>
+            </tr> -->
+
+            <tr>
+              <td><label for="affiliated">MMSU Affiliated:</label></td>
+              <td colspan="2">
+                <div style="display: flex; align-items: center;">
+                  <label for="affiliatedYes" style="margin-right: 10px; margin-left: 10px;">Yes</label>
+                  <input type="radio" id="affiliatedYes" value="Yes" v-model="contactInfo.mmsu_affiliated" @change="handleAffiliatedChange">
+                  <label for="affiliatedNo" style="margin-left: 15px;">No</label>
+                  <input type="radio" id="affiliatedNo" value="No" v-model="contactInfo.mmsu_affiliated" @change="handleAffiliatedChange">
+                </div>
+              </td>
+            </tr>
+
+            <tr v-if="contactInfo.mmsu_affiliated === 'Yes'">
+              <td colspan="2"><b>If you are affiliated with the university, please provide the following: </b></td>
+            </tr>
+            <tr v-if="contactInfo.mmsu_affiliated === 'Yes'">
+              <td><label for="university_id">University ID (Student Number or Employee Number): </label></td>
+              <td><input type="text" id="university_id" v-model="contactInfo.university_id"></td>
+            </tr>
+            <tr v-if="contactInfo.mmsu_affiliated === 'Yes'">
+              <td><label for="college">College Name:</label></td>
+              <td><input type="text" id="college" v-model="contactInfo.college"></td>
+            </tr>
+            <tr v-if="contactInfo.mmsu_affiliated === 'Yes'">
+              <td><label for="department">Office or Department Name:</label></td>
+              <td><input type="text" id="department" v-model="contactInfo.department"></td>
+            </tr>
+            <tr v-if="contactInfo.mmsu_affiliated === 'No'">
+              <td><label for="officeAgency">Office/Agency:</label></td>
+              <td><input type="text" id="officeAgency" v-model="contactInfo.officeAgency"></td>
+            </tr>
+                  
           </table>
           <!-- Navigation buttons -->
           <div class="mt-2">
@@ -188,12 +233,16 @@
                 <p>Address: {{ contactInfo.address }}</p>
                 <p>Email: {{ contactInfo.email }}</p>
                 <p>Contact Number: {{ contactInfo.phone }}</p>
-                <div v-if="contactInfo.mmsu_affiliated">
+                <div v-if="contactInfo.mmsu_affiliated === 'Yes'">
                   <p>University ID: {{ contactInfo.university_id }}</p>
                   <p>College Name: {{ contactInfo.college }}</p>
                   <p>Department Name: {{ contactInfo.department }}</p>
                 </div>
-                
+                <div v-else-if="contactInfo.mmsu_affiliated === 'No'">
+                  <p>Office/Agency: <input type="text" v-model="contactInfo.officeAgency"></p>
+                </div>
+                                
+
               <br><hr>
 
               <div>
@@ -256,86 +305,31 @@ export default {
               address: '',
               email: '',
               phone: '',
-              mmsu_affiliated: false,
+              mmsu_affiliated: '',
               college: '',
               department: '',
               university_id: '',
+              officeAgency:''
       }
 
       };
     },
-    // computed: {
-    //   selectedServiceHasQuantity() {
-    //         if (this.services.length === 0) {
-    //           return false; // No services fetched yet, assume no quantity field
-    //         }
-
-    //         // Check if the first service (you can adjust this logic as needed) has a quantity field
-    //         const firstService = this.services[0];
-    //         return 'quantity' in firstService; // Returns true if 'quantity' exists in the service data, false otherwise
-    //       },
-
-    //   selectedServiceHasRemarks() {
-    //         if (this.services.length === 0) {
-    //           return false; // No services fetched yet, assume no remarks field
-    //         }
-
-    //         // Check if the first service (you can adjust this logic as needed) has a remarks field
-    //         const firstService = this.services[0];
-    //         return 'remarks' in firstService; // Returns true if 'remarks' exists in the service data, false otherwise
-    //       },
-    //   },
-
-    methods: {
+ 
+  methods: {
            
 //-------------------------------------------------------------------------------------//
-            async fetchFacilityPricing() {
-                    try {
-                      const response = await axios.get(`/facility-pricing/${this.facilityId}`);
-                      // Assuming response.data contains the pricing details for the selected facility
-                      this.facilityPrice = response.data;
-                    } catch (error) {
-                      console.error('Error fetching facility pricing:', error);
-                    }
-                  },
-
-            calculateEstimatedTotal() {
-                  if (this.selectedFacility && this.startTime && this.endTime) {
-                    const facilityPrice = this.selectedFacility.facilityPrices.find(
-                      (price) => price.hours === this.selectedFacility.hours
-                    );
-
-                    if (facilityPrice) {
-                      const start = new Date(`2000-01-01 ${this.startTime}`);
-                      const end = new Date(`2000-01-01 ${this.endTime}`);
-                      const hours = Math.abs(end - start) / 36e5;
-
-                      const pricePerHour = facilityPrice.amount;
-                      const estimatedTotal = hours * pricePerHour;
-
-                      this.estimatedTotal = estimatedTotal;
-                    }
-                  }
-                },
-                watch: {
-                startTime() {
-                  this.calculateEstimatedTotal();
-                },
-                endTime() {
-                  this.calculateEstimatedTotal();
-                },
-                selectedFacility() {
-                  this.calculateEstimatedTotal();
-                },
-              },
 //-------------------------------------------------------------------------------------//
 
             handleAffiliatedChange() {
-                if (!this.contactInfo.mmsu_affiliated) {
+              if (this.contactInfo.mmsu_affiliated === 'No') {
                   // Reset affiliated fields to empty or null
                   this.contactInfo.university_id = '';
                   this.contactInfo.college = '';
                   this.contactInfo.department = '';
+                  this.contactInfo.officeAgency = ''; // Reset office/agency field when 'No' is selected
+                } else {
+                  // Reset the office/agency field when changing from 'No' to 'Yes'
+                  this.contactInfo.officeAgency = '';
                 }
               },
 
@@ -373,41 +367,13 @@ export default {
                       return `${formattedTime.padStart(2, '0')} ${suffix}`;
                   },
 
-                  calculateTotalPrice() {
-                    // Fetch hourly rate based on facilityId and current month from the backend
-                    axios.get(`/get-hourly-rate/${this.facilityId}`)
-                      .then((response) => {
-                        const hourlyRate = response.data.hourlyRate;
-
-                        // Calculate Hours
-                        const start = new Date(`2000-01-01 ${this.startTime}`);
-                        const end = new Date(`2000-01-01 ${this.endTime}`);
-                        const hours = (end - start) / (1000 * 60 * 60);
-
-                        // Calculate Total Price
-                        this.totalPrice = hours * hourlyRate;
-                      })
-                      .catch((error) => {
-                        console.error('Error fetching hourly rate:', error);
-                      });
-                  },
-
-                  //option lang etoy if agbaliw ti date haha
-                  watch: {
-                    startTime(newValue) {
-                      this.calculateTotalPrice();
-                    },
-                    endTime(newValue) {
-                      this.calculateTotalPrice();
-                    },
-                  },
-
 //---------------------------------------------------------------------------------------------------------------------------------//
 
      async submitReservation() {
-              const mmsu_affiliated_value = this.contactInfo.mmsu_affiliated ? 1 : 0;
+              
               const selectedServices = this.services.filter((service, index) => this.serviceSelection[index]);
-
+              // Transform 'Yes' to 1 and 'No' to 0
+             
               try{
                      const clientData = {
                           fname: this.contactInfo.fname,
@@ -416,10 +382,11 @@ export default {
                           address: this.contactInfo.address,
                           email: this.contactInfo.email,
                           phone: this.contactInfo.phone,
-                          mmsu_affiliated: mmsu_affiliated_value,
+                          mmsu_affiliated: this.contactInfo.mmsu_affiliated === 'Yes' ? 1 : 0,
                           university_id: this.contactInfo.university_id,
                           college: this.contactInfo.college,
-                          department: this.contactInfo.department
+                          department: this.contactInfo.department,
+                          officeAgency:this.contactInfo.officeAgency,
                       };
 
                       const clientResponse = await axios.post('/save-client', clientData);

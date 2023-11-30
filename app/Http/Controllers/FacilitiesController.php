@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 class FacilitiesController extends Controller
 {
 
-
             //from the internet, Carbon, idk what is carbon ;<
             public function loadFacilities (Request $request)
             {
@@ -20,7 +19,7 @@ class FacilitiesController extends Controller
                 $currentMonth = date('n');
 
                 // Load facilities with prices for the current month
-                $facilities = Facility::with(['prices' => function ($query) use ($currentMonth) {
+                $facilities     = Facility::with(['prices' => function ($query) use ($currentMonth) {
                     $query->where(function ($q) use ($currentMonth) {
                         $q->where('monthFrom', '<=', $currentMonth)  // Check if the price is valid for the current month
                             ->where(function ($q) use ($currentMonth) {

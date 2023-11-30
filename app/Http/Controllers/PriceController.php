@@ -14,6 +14,7 @@ class PriceController extends Controller
                 $price = new FacilityPrice();
                 $price->facility_id = $priceData['facility_id']; // This is the foreign key
                 $price->amount = $priceData['amount'];
+                $price->timePeriod = $priceData['timePeriod'];
                 $price->monthFrom = $priceData['monthFrom'];
                 $price->monthTo = $priceData['monthTo'];
                 $price->hours = $priceData['hours'];
