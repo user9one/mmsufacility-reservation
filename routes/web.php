@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\FacilitiesController;
 use App\Http\Controllers\AuthController;
@@ -21,12 +22,8 @@ use App\Http\Controllers\ServicesController;
 */
 
 
-// Route::get('/admin', function () {
-//     return view('admin_app');
-// })->where('any', '.*');
-
-Route::get('/services', [ServicesController::class, 'fetchServices']); //fetch services_name sa table beshy
-
+// -----------------------------CLIENT--------------------------//
+Route::get('/services', [ServicesController::class, 'fetchServices']); //fetch services_name sa table kuya
 Route::get('/list-facilities', [FacilitiesController::class, 'loadFacilities']); //fetch facilities para idjy facilities a page haha
 
 
@@ -34,7 +31,7 @@ Route::get('/list-facilities/{id}', [FacilitiesController::class, 'getFacilityDe
 Route::get('/facility-pricing/{id}', [FacilitiesController::class, 'getFacilityPricing']);//fetching facility price whatever 
 Route::get('/facility-details/{id}', [FacilitiesController::class, 'getFacilityDetails']);
 
-//SUBMIT THE RESERVATION or something, yeah haha
+//SUBMIT THE RESERVATION
 Route::post('/save-client', [ClientController::class, 'saveClient']);
 Route::post('/save-reservation', [ReservationController::class, 'saveReservation']);
 Route::post('/save-services-availed', [ReservationServicesController::class, 'saveReservationService']);
@@ -44,19 +41,10 @@ Route::post('/save-services-availed', [ReservationServicesController::class, 'sa
 
 
 
-//
+// -----------------------------ADMIN--------------------------//
 
 Route::view('/admin', 'admin');
 
-// Route::middleware('auth')->group(function () {
-//     Route::prefix('facilities')->group(function () {
-//         // Routes for businessoffice facilities
-//         Route::get('/businessoffice', 'FacilitiesController@businessoffice');
-
-//         // Routes for chumoffice facilities
-//         Route::get('/chumoffice', 'FacilitiesController@chumoffice');
-//     });
-// });
 
 Route::middleware(['auth', 'admin'])->group(function () {
     // Routes for the admin dashboard
@@ -65,6 +53,15 @@ Route::middleware(['auth', 'admin'])->group(function () {
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/check-user', [AuthController::class, 'checkUser']);
 Route::post('/logout', [AuthController::class, 'logout']);
+
+
+
+
+
+
+
+
+
 
 Route::get('/{any}', function () {
     return view('app');

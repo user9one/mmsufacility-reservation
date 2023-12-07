@@ -7,8 +7,11 @@ import Contact from "../Pages/Contact.vue";
 import Reserve from "../Pages/Reserve.vue";
 import ThankYou from "../Pages/ThankYou.vue";
 import Notfound from "../Pages/Notfound.vue";
+
+//-------------------Admin --------------------//
 import Login from '../Components/Admin/Login.vue';
 import AdminDashboard from '../Pages/Admin/AdminDashboard.vue';
+
 
 const router = createRouter({
   history: createWebHistory("/"),
@@ -71,6 +74,9 @@ const router = createRouter({
       path: '/:pathMatch(.*)*',
       redirect: '/not-found'
     },
+
+
+    // ----- ADMIN ------
     {
       path: '/admin/dashboard',
       component: AdminDashboard,
@@ -81,6 +87,7 @@ const router = createRouter({
     },
   ]
 });
+
 
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);

@@ -30,7 +30,12 @@ class FacilitiesController extends Controller
                 }])
                 ->get();
 
-            return $facilities;
+            // Transform tags string to array for each facility
+                foreach ($facilities as &$facility) {
+                    $facility['tagsArray'] = explode(', ', $facility['tags']); // Assuming 'tags' is the field in the Facility model
+                }
+
+                return response()->json($facilities);
         }
 
         //For the Reservation
@@ -41,6 +46,12 @@ class FacilitiesController extends Controller
                     if (!$facility) {
                         return response()->json(['error' => 'Facility not found'], 404);
                     }
+
+                    // Convert the tags string to an array using explode()
+                        $tagsArray = explode(', ', $facility->tags); // Assuming tags are separated by a comma and space
+
+                        // Add the tags array to the facility data
+                        $facility['tagsArray'] = $tagsArray;
                 
                     return response()->json($facility);
                 }

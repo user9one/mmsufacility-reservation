@@ -32,7 +32,7 @@
             <h3 class="font-bold mb-2">Highlights/Key Features</h3>
             <div class="tags-section">
               <div class="tags-container text-l">
-                <div v-for="(tag, index) in tagsArray" :key="index" class="tag-box">
+                <div v-for="(tag, index) in facility.tagsArray" :key="index" class="tag-box">
                   {{ tag }}
                 </div>
               </div>
@@ -65,6 +65,7 @@
   </div>
 </template>
 
+
 <script>
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import Footer from '../Components/Footer.vue';
@@ -96,7 +97,13 @@ export default {
 
       axios.get(`/list-facilities/${facilityId}`).then(response => {
         this.facility = response.data;
-        this.tagsArray = JSON.parse(this.facility.tags.replace(/'/g, '"')); // Convert string representation to array
+
+        // Extract tags from the facility data
+          facilityData.tagsArray = facilityData.tags.split(',').map(tag => tag.trim());
+
+      // Assign the modified facility data to this.facility
+      this.facility = facilityData;
+              
       });
 
       axios.get(`/facility-pricing/${facilityId}`).then(response => {
