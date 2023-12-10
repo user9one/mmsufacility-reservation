@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\Facility;
+use App\Models\FacilityPrice;
 use App\Models\Price;
 use Carbon\Carbon;
+
 
 use Illuminate\Http\Request;
 
@@ -68,4 +71,110 @@ class FacilitiesController extends Controller
 
                         return response()->json($facility->prices); // Return the pricing details for the facility
                     }
+
+
+//------------------------------------------------------------------------//
+public function saveFacility(Request $request)
+    {
+        $facility = new Facility();
+        $facility->admin_id = Auth::id(); 
+        $facility->facility_name = $request->name;
+        $facility->shortdes = $request->shortdes;
+        $facility->description = $request->description;
+        $facility->location = $request->location;
+        $facility->capacity = $request->capacity;
+        $facility->tags = $request->tags;
+        $facility->save();
+
+        return response()->json(['id' => $facility->id]);
+
+    }
+
+    public function savePrices(Request $request)
+    {
+        $pricesData = $request->all();
+
+        // dd($pricesData);
+
+        foreach ($pricesData as $price) {
+            $facilityPrice = new FacilityPrice(); 
+            $facilityPrice->facility_id = $price['facility_id']; // Make sure this matches your data structure
+            $facilityPrice->amount = $price['amount'];
+            $facilityPrice->monthFrom = $price['monthFrom'];
+            $facilityPrice->monthTo = $price['monthTo'];
+            $price->timePeriod = $priceData['timePeriod'];
+            $facilityPrice->hours = $price['hours'];
+            $facilityPrice->save();
+        }
+        // Return a response indicating success or any other required information
+        return response()->json(['message' => 'Prices data successfully saved']);
+    
+    }
+
+    public function getAllFacilities(Request $request)
+    {
+        $facilities = Facility::all();
+
+        return $facilities;
+    }
+
+    public function deleteFacility($id){
+        $res= Facility::find($id)->delete();
+
+        return 1;
+       //  $list = $this->table();
+       //  return $list;
+   }
+
+   public function saveEditedFacilityPrices(Request $request, $id){
+
+    $facility = FacilityPrice::where('facility_id', $id)->delete();
+
+    $pricesData = $request->all();
+
+    // dd($pricesData);
+
+    foreach ($pricesData as $price) {
+        $facilityPrice = new FacilityPrice(); 
+        $facilityPrice->facility_id = $price['facility_id']; // Make sure this matches your data structure
+        $facilityPrice->amount = $price['amount'];
+        $facilityPrice->monthFrom = $price['monthFrom'];
+        $facilityPrice->monthTo = $price['monthTo'];
+        $price->timePeriod = $priceData['timePeriod'];
+        $facilityPrice->hours = $price['hours'];
+        $facilityPrice->save();
+    }
+    return response()->json(['message' => 'Facility updated successfully']);
+   }
+
+
+   /// Update facility
+   public function updateFacility(Request $request, $id)
+   {
+       // Validate and update facility data
+       $facility = Facility::findOrFail($id);
+       $facility->update($request->all());
+       $facility->admin_id = Auth::id(); // Set the admin_id here
+    $facility->save();
+
+
+       return response()->json(['message' => 'Facility updated successfully']);
+   }
+
+
+
+   //List facilities only if sino ti naka logged in
+   public function loadAdminFacilities(Request $request)
+        {
+            $adminId = Auth::id(); // Retrieve the ID of the currently logged-in admin
+            
+            // Fetch facilities based on admin_id
+            $facilities = Facility::where('admin_id', $adminId)->get();
+
+            return response()->json($facilities);
+
+        }
+
+        
+    
 }

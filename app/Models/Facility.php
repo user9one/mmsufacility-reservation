@@ -20,4 +20,11 @@ class Facility extends Model
         return $this->hasMany(Price::class);
     }
 
+
+    protected $fillable = ['admin_id', 'facility_name', 'description', 'location', 'capacity', 'amount', 'hours', 'shortdes', 'tags' ];
+
+    public function facilityPrices()
+    {
+        return $this->hasMany(FacilityPrice::class, 'facility_id');
+    }
 }

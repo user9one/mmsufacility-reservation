@@ -57,7 +57,7 @@ export default {
 
       axios.post('/login', requestData).then(({ data }) => {
         if (data === 1) {
-          this.$router.push('/admin/dashboard');
+          this.$router.push('/admin/admindashboard');
         } else {
           this.error = 'Username and Password Mismatched';
         }

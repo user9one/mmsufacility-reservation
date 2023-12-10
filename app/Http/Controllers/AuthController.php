@@ -35,4 +35,10 @@ class AuthController extends Controller
         Auth::logout();
         return 1;
     }
+
+    public function getAdminId()
+    {
+        $adminId = Auth::id(); // Retrieve the authenticated admin's ID
+        return response()->json(['admin_id' => $adminId]);
+    }
 }
