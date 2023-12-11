@@ -8,6 +8,8 @@ import Reserve from "../Pages/Reserve.vue";
 import ThankYou from "../Pages/ThankYou.vue";
 import Notfound from "../Pages/Notfound.vue";
 
+
+
 //-------------------Admin --------------------//
 import Login from '../Components/Admin/Login.vue';
 import AdminDashboard from "../Pages/Admin/AdminDashboard.vue"
