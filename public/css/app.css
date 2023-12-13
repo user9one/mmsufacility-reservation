@@ -1212,12 +1212,6 @@ video {
 .bg-opacity-70 {
   --tw-bg-opacity: 0.7;
 }
-.bg-contain {
-  background-size: contain;
-}
-.bg-center {
-  background-position: center;
-}
 .p-0 {
   padding: 0px;
 }
