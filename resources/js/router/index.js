@@ -15,8 +15,8 @@ import Addfacilities from "../Components/Admin/Addfacilities.vue"
 import AdminFacilities from "../Pages/Admin/AdminFacilities.vue"
 import AdminCalendar from "../Pages/Admin/AdminCalendar.vue"
 import AdminReservation from "../Pages/Admin/AdminReservation.vue"
-import AdminProfile from "../Pages/Admin/AdminProfile.vue"
-import AdminPayment from "../Pages/Admin/AdminPayment.vue"
+// import AdminProfile from "../Pages/Admin/AdminProfile.vue"
+// import AdminPayment from "../Pages/Admin/AdminPayment.vue"
 import AdminReport from "../Pages/Admin/AdminReport.vue"
 import Pic from "../Components/Admin/Pic.vue"
 import AdminServices from "../Pages/Admin/AdminServices.vue"
@@ -91,6 +91,7 @@ const router = createRouter({
 
     {
       path: '/admin/login',
+      name: '/adminlogin',
       component: Login,
     },
     {
@@ -119,17 +120,17 @@ const router = createRouter({
       component: AdminReservation
     },
 
-    {
-      path: '/admin/adminprofile',
-      name: 'adminprofile',
-      component: AdminProfile
-    },
+    // {
+    //   path: '/admin/adminprofile',
+    //   name: 'adminprofile',
+    //   component: AdminProfile
+    // },
 
-    {
-      path: '/admin/adminpayment',
-      name: 'adminpayment',
-      component: AdminPayment
-    },
+    // {
+    //   path: '/admin/adminpayment',
+    //   name: 'adminpayment',
+    //   component: AdminPayment
+    // },
 
     {
       path: '/admin/adminreport',

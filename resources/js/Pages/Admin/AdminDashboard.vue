@@ -1,21 +1,14 @@
 <template lang="">
-  <div class="flex flex-row w-full"><!--Main-->
+  <div class="flex flex-row w-full" style="overflow: auto"><!--Main-->
     <aside class="sticky top-0 shadow-lg shadow-gray-500 w-80 h-screen"><!--Side Nav-->
-         
       <div class="flex items-center justify-center h-14 mt-20">
-         <img src="/mmsu logo.png" alt="Logo" class="w-36" />
+         <img src="\src\mmsu-logo.png" alt="Logo" class="w-36" />
       </div>
           <div class="grid grid-cols-1 mt-20">
             <router-link to="/admin/admindashboard" class="block px-4 py-2 text-gray-800 router-link" trigger="hover" active-class="active-link">
                   <span class="flex items-center">
                       <lord-icon src="https://cdn.lordicon.com/wmwqvixz.json" trigger="morph" state="morph-home-3" colors="primary:#ffffff" class="w-7 h-7 mr-2" />
                       Dashboard
-                  </span>
-              </router-link>
-              <router-link to="/admin/adminprofile" class="block px-4 py-2 text-gray-800 router-link" active-class="active-link">
-                  <span class="flex items-center">
-                    <lord-icon src="https://cdn.lordicon.com/hrjifpbq.json" trigger="hover" colors="primary:#ffffff" class="w-7 h-7 mr-2" />
-                      Profile
                   </span>
               </router-link>
               <router-link to="/admin/admincalendar" class="block px-4 py-2 text-gray-800 router-link" active-class="active-link">
@@ -41,13 +34,7 @@
                       <lord-icon src="https://cdn.lordicon.com/iazmohzf.json" trigger="hover" colors="primary:#ffffff" class="w-7 h-7 mr-2" />
                       Services 
                   </span>
-              </router-link>
-              <router-link to="/admin/adminpayment" class="block px-4 py-2 text-gray-800 router-link" active-class="active-link">
-                  <span class="flex items-center">
-                    <lord-icon src="https://cdn.lordicon.com/ncitidvz.json" trigger="hover" colors="primary:#ffffff" class="w-7 h-7 mr-2" />
-                      Payments 
-                  </span>
-              </router-link>                     
+              </router-link>                
               <router-link to="/admin/adminreport" class="block px-4 py-2 text-gray-800 router-link" active-class="active-link">
                   <span class="flex items-center">
                       <lord-icon src="https://cdn.lordicon.com/yrbmguoo.json" trigger="hover" colors="primary:#ffffff" class="w-7 h-7 mr-2" />
@@ -55,12 +42,11 @@
                   </span>
               </router-link> 
               <router-link to="/admin/login" class="block px-4 py-2 text-gray-800 router-link" active-class="active-link">
-                  <span class="flex items-center">
-                      <lord-icon src="https://cdn.lordicon.com/whtfgdfm.json" trigger="hover" colors="primary:#ffffff" class="w-7 h-7 mr-2" />
-                      Logout 
-                  </span>
+                <button @click="logout" class="flex items-center">
+                  <lord-icon src="https://cdn.lordicon.com/whtfgdfm.json" trigger="hover" colors="primary:#ffffff" class="w-7 h-7 mr-2" />
+                  Logout
+                </button>
               </router-link>
-              <button @click="logout">Logout</button>
           </div>
       </aside><!--Side Nav End-->
   
