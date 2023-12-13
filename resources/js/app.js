@@ -4,16 +4,17 @@ import { createApp } from 'vue';
 import App from './Components/App.vue';
 import Navbar from './Components/Navbar.vue';
 import Footer from './Components/Footer.vue'
-import Carousel from './Components/Carousel.vue'
+import ImageCarousel from './Components/ImageCarousel.vue'
 import AdminNavbar from './Components/Admin/AdminNavbar.vue';
 import AdminFooter from './Components/Admin/AdminFooter.vue';
 import AdminDashboard from './Pages/Admin/AdminDashboard.vue';
-import Addfacilities from './Components/Admin/Addfacilities.vue'
+import Addfacilities from './Components/Admin/Addfacilities.vue';
+import ReviewForm from './Components/ReviewForm.vue';
 import '../css/app.css';
 import router from "./router"
 
-import  VueCarousel from 'vue-carousel';
 
+import VueSplide from '@splidejs/vue-splide';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 
 
@@ -21,16 +22,17 @@ const app = createApp(App);
 app.use(router);
 app.component('Navbar', Navbar);
 app.component('Footer', Footer);
-app.component('Carousel', Carousel);
+app.component('ImageCarousel', ImageCarousel);
 app.component('AdminNavbar', AdminNavbar);
 app.component('AdminFooter', AdminFooter);
 app.component('AdminDashboard', AdminDashboard);
 app.component('Addfacilities', Addfacilities);
+app.component('ReviewForm', ReviewForm);
 
 app.mount('#app');
 app.use(CKEditor);
 
-app.use(VueCarousel); // Use VueCarousel as a plugin
+app.use( VueSplide );
 
 
 app.mixin({

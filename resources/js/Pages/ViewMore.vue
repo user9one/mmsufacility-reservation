@@ -60,7 +60,9 @@
           </div>
           </div>
       </div>
+        <ReviewForm />
       </div>
+      
     <Footer />
   </div>
 </template>
@@ -70,12 +72,14 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import Footer from '../Components/Footer.vue';
 import Navbar from '../Components/Navbar.vue';
+import ReviewForm from '../Components/ReviewForm.vue';
 import axios from 'axios';
 
 export default {
   components: {
     Navbar,
     Footer,
+    ReviewForm,
   },
   data() {
     return {
@@ -95,26 +99,20 @@ export default {
       // Get the current month (assuming it's 1-12)
       const currentMonth = new Date().getMonth() + 1;
 
-      axios.get(`/list-facilities/${facilityId}`).then(response => {
-        this.facility = response.data;
+          axios.get(`/list-facilities/${facilityId}`).then(response => {
+            this.facility = response.data;
 
-        // Extract tags from the facility data
-          facilityData.tagsArray = facilityData.tags.split(',').map(tag => tag.trim());
+          });
 
-      // Assign the modified facility data to this.facility
-      this.facility = facilityData;
-              
-      });
-
-      axios.get(`/facility-pricing/${facilityId}`).then(response => {
-        // Filter prices for the current month
-        const prices = response.data;
-        this.facilityPrices = prices.filter(price => {
-          return (
-            (price.monthFrom <= currentMonth && price.monthTo >= currentMonth) ||
-            price.monthTo === null // Include prices that are indefinite
-          );
-        });
+          axios.get(`/facility-pricing/${facilityId}`).then(response => {
+            // Filter prices for the current month
+            const prices = response.data;
+            this.facilityPrices = prices.filter(price => {
+              return (
+                (price.monthFrom <= currentMonth && price.monthTo >= currentMonth) ||
+                price.monthTo === null // Include prices that are indefinite
+              );
+            });
       });
     },
   },

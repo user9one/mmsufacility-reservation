@@ -8,11 +8,13 @@
 </head>
 <body>
     <div id="app">
+
         @if(auth()->check())
             <AdminDashboard />
         @else
             <App />
         @endif
+        
     </div>
     
     <script>

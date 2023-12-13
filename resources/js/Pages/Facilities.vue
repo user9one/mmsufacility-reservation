@@ -18,20 +18,23 @@
       <div class="shadow-md bg-gray-100 shadow-gray-500">
         <div class="p-4">
           <div
-            v-for="(facility, index) in availableFacilities" :key="index" class="bg-white rounded-lg shadow-md mb-4"
+            v-for="(facility, index) in availableFacilities"
+            :key="index"
+            class="bg-white rounded-lg shadow-md mb-4"
           >
             <!-- Facility Content -->
             <div class="md:flex md:items-start">
+              <!-- Desktop view: Carousel on the left -->
               <div class="md:w-1/3 md:pr-4">
                 <!-- Image Carousel -->
-                <Carousel :images="facility.images" />
+                <ImageCarousel :src="facility.images" option="full" />
               </div>
 
               <div class="md:w-2/3 md:pl-4">
                 <!-- Mobile view: Carousel on top -->
                 <div class="sm:hidden">
                   <!-- Image Carousel -->
-                  <Carousel :images="facility.images" />
+                  <!-- <ImageCarousel :src="facility.images" option="full" /> -->
                 </div>
 
                 <!-- Facility Details -->
@@ -104,13 +107,14 @@
 import Footer from '../Components/Footer.vue';
 import Navbar from '../Components/Navbar.vue';
 import axios from 'axios';
-import Carousel from '../Components/Carousel.vue';
+import ImageCarousel from '../Components/ImageCarousel.vue';
+
 
 export default {
   components: {
     Navbar,
     Footer,
-    Carousel,
+    ImageCarousel,
   },
   data() {
     return {
@@ -119,8 +123,8 @@ export default {
       selectedFacilityId: null,
     };
   },
-
   computed: {
+    // Separating available and unavailable facilities
     availableFacilities() {
       return this.facilities.filter(facility => facility.availability === 1);
     },
@@ -130,48 +134,30 @@ export default {
   },
 
   methods: {
+    // loadFacilities() {
+    //   axios.get('/list-facilities').then(response => {
+    //     this.facilities = response.data;
+    //   }).catch(error => {
+    //     console.error('Error fetching facilities:', error);
+    //   });
+    // },
     loadFacilities() {
-      axios.get('/list-facilities')
-        .then(response => {
-          if (response.data && Array.isArray(response.data)) {
-            this.facilities = response.data;
-            this.loadImagesForFacilities();
-          } else {
-            console.error('Facilities data is empty or not an array.');
-          }
-        })
-        .catch(error => {
+        axios.get('/list-facilities').then(response => {
+          this.facilities = response.data;
+
+          // Fetch images for each facility
+          this.facilities.forEach(facility => {
+            axios.post('/imageList', { facilityId: facility.id }).then(imagesResponse => {
+              // Assign fetched images to each facility
+              facility.images = imagesResponse.data;
+            }).catch(error => {
+              console.error('Error fetching images for facility:', error);
+            });
+          });
+        }).catch(error => {
           console.error('Error fetching facilities:', error);
         });
-    },
-
-    loadImagesForFacilities() {
-      const imageRequests = this.facilities.map(facility => {
-        return axios.post('/imageList', { facilityId: facility.id })
-          .then(response => {
-            if (response.data && Array.isArray(response.data)) {
-              facility.images = response.data.map(image => ({
-                url: image.url,
-                
-              }));
-            } else {
-              console.error(`No images found for facility ID ${facility.id}.`);
-            }
-          })
-          .catch(error => {
-            console.error(`Error fetching images for facility ID ${facility.id}:`, error);
-          });
-      });
-
-      Promise.all(imageRequests)
-        .then(() => {
-          // All image requests completed
-          console.log('Images loaded for all facilities:', this.facilities);
-        })
-        .catch(error => {
-          console.error('Error loading images for facilities:', error);
-        });
-    },
+},
 
     selectFacility(facilityId) {
       this.selectedFacilityId = facilityId;
