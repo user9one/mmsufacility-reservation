@@ -69,8 +69,8 @@ Route::put('/update-facility/{id}', [FacilitiesController::class, 'updateFacilit
 
 Route::post('/upload-image', [ImageController::class, 'store']);
 Route::post('/imageList', [ImageController::class, 'imageList']);
-
 Route::post('/delete-image/{id}', [ImageController::class, 'deleteImage']);
+
 Route::get('/reservations', [ReservationController::class, 'index']);
 Route::get('/services', [ServicesController::class, 'index']);
 Route::post('/services', [ServicesController::class, 'store']);
