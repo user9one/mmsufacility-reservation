@@ -9,6 +9,7 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ReservationServicesController;
 use App\Http\Controllers\ServicesController;
+use App\Http\Controllers\ReviewController;
 
 use App\Http\Controllers\ImageController;
 
@@ -39,8 +40,14 @@ Route::post('/save-reservation', [ReservationController::class, 'saveReservation
 Route::post('/save-services-availed', [ReservationServicesController::class, 'saveReservationService']);
 
 
+Route::post('/submit-review', [ReviewController::class, 'uploadReview']);
+Route::get('/facility-reviews/{facility_id}', [ReviewController::class, 'getFacilityReviews']);
+
+// Route to fetch images by facility ID
+Route::get('/facility-images/{facilityId}', [ImageController::class, 'getFacilityImages']);
 
 
+Route::match(['get', 'post'], '/check-conflict', [ReservationController::class, 'checkConflict']);
 
 
 // -----------------------------ADMIN--------------------------//
@@ -68,7 +75,7 @@ Route::post('/delete-facility/{id}',[FacilitiesController::class, 'deleteFacilit
 Route::put('/update-facility/{id}', [FacilitiesController::class, 'updateFacility']);
 
 Route::post('/upload-image', [ImageController::class, 'store']);
-Route::post('/imageList', [ImageController::class, 'imageList']);
+Route::post('/imageList', [ImageController::class, 'imageList']); //fetching Images
 Route::post('/delete-image/{id}', [ImageController::class, 'deleteImage']);
 
 Route::get('/reservations', [ReservationController::class, 'index']);

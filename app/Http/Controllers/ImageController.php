@@ -49,4 +49,12 @@ class ImageController extends Controller
         $res = Image::where('id', $id)->delete();
         return 1;
     }
+
+
+    public function getFacilityImages($facilityId)
+    {
+        $facilityImages = Image::where('facility_id', $facilityId)->get();
+        return response()->json(['images' => $facilityImages]);
+    }
+    
 }

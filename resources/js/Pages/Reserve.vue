@@ -27,14 +27,27 @@
                 <td>Expected Participants:</td>
                 <td><input type="number" v-model="participants" required></td>
               </tr>
-              <tr>
-                <td>Event Date:</td>
-                <td>
-                  <input type="date" v-model="eventDateFrom" required>
-                  <span>to</span>
-                  <input type="date" v-model="eventDateTo" required>
-                </td>
-              </tr>
+  <tr>
+        <td>Event Date:</td>
+        <td>
+          <div class="date-picker">
+            <input
+              type="text"
+              v-model="eventDateFrom"
+              class="date-input"
+              placeholder="Start Date"
+              id="startDatePicker"
+            />
+            <input
+              type="text"
+              v-model="eventDateTo"
+              class="date-input"
+              placeholder="End Date"
+              id="endDatePicker"
+            />
+          </div>
+        </td>
+      </tr>
               <tr>
               <td>Start Time:</td>
               <td><input type="time" v-model="startTime" @change="setTimeFormat" required></td>
@@ -45,10 +58,16 @@
               </tr>
               
             </table>
+
+            <p class="mt-4 text-sm text-gray-600">
+              <strong>Disclaimer:</strong> For events spanning multiple days, the program schedule should maintain consistent timing throughout the duration.
+            </p>
+
+
           <!-- Navigation buttons -->
                       <div class="mt-2">
-                      <button @click.prevent="cancelReservation" class="mr-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Cancel</button>
-                      <button @click.prevent="nextStep" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Next</button>
+                        <button @click.prevent="cancelReservation" class="mr-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Cancel</button>
+          <button @click.prevent="validateConflict" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Next</button>
                     </div>
         </div>
     
@@ -57,7 +76,7 @@
           <h2 class="font-bold text-lg mb-4">Do you want to avail any of the Services? </h2>
           <h5>(Click Yes to avail)</h5>
           <br>
-          <table class="shadow-md bg-white rounded-lg overflow-hidden border border-gray-300">
+          <table class="shadow-md bg-white rounded-lg overflow-hidden ">
             <thead>
               <tr>
                 <th>Services</th>
@@ -76,17 +95,18 @@
                 <td>
                   <input type="radio" :name="'selection-' + index" value="No" v-model="serviceSelection[index]" @change="toggleFields(index, 'No')">
                 </td>
-                <td v-if="serviceSelection[index] === 'Yes'">
+                <td v-if="serviceSelection[index] === 'Yes' && service.type !== 'audiovisual'">
                   <input type="number" v-model="quantities[index]" placeholder="Quantity">
                 </td>
                 <td v-else>
-                  <!-- Render blank cell for No selection -->
+                  <!-- Render blank cell for No selection or audiovisual services -->
                 </td>
-                <td v-if="serviceSelection[index] === 'Yes'">
+                <td v-if="serviceSelection[index] === 'Yes' && (service.type === 'tech' || service.type === 'seating' || service.type === 'food' || service.type === 'audiovisual')">
                   <input type="text" v-model="remarks[index]" placeholder="Remarks">
                 </td>
+
                 <td v-else>
-                  <!-- Render blank cell for No selection -->
+                  <!-- Render blank cell for No selection or non-audiovisual services -->
                 </td>
               </tr>
             </tbody>
@@ -128,39 +148,6 @@
                   <td><label for="phone">Phone:</label></td>
                   <td><input type="tel" id="phone" v-model="contactInfo.phone"></td>
               </tr>
-              <!-- <tr>
-              <td><label for="affiliated">MMSU Affiliated:</label></td>
-              <td colspan="2">
-                <div style="display: flex; align-items: center;">
-                  <label for="affiliatedYes" style="margin-right: 10px; margin-left: 10px;" >Yes</label>
-                  <input type="radio" id="affiliatedYes" value="Yes" v-model="contactInfo.mmsu_affiliated">
-                  
-                  <label for="affiliatedNo" style="margin-left: 15px;">No</label>
-                  <input type="radio" id="affiliatedNo" value="No" v-model="contactInfo.mmsu_affiliated">
-                 
-                </div>
-              </td>
-            </tr>
-
-            <tr v-if="contactInfo.mmsu_affiliated === 'Yes'">
-              <td colspan="2"><b>If you are affiliated with the university, please provide the following: </b></td>
-            </tr>
-            <tr v-if="contactInfo.mmsu_affiliated === 'Yes'">
-              <td><label for="university_id">University ID (Student Number or Employee Number): </label></td>
-              <td><input type="text" id="university_id" v-model="contactInfo.university_id"></td>
-            </tr>
-            <tr v-if="contactInfo.mmsu_affiliated === 'Yes'">
-              <td><label for="college">College Name:</label></td>
-              <td><input type="text" id="college" v-model="contactInfo.college"></td>
-            </tr>
-            <tr v-if="contactInfo.mmsu_affiliated === 'Yes'">
-              <td><label for="department">Office or Department Name:</label></td>
-              <td><input type="text" id="department" v-model="contactInfo.department"></td>
-            </tr>
-            <tr v-if="contactInfo.mmsu_affiliated === 'No'">
-              <td><label for="officeAgency">Office/Agency:</label></td>
-              <td><input type="text" id="officeAgency" v-model="contactInfo.officeAgency"></td>
-            </tr> -->
 
             <tr>
               <td><label for="affiliated">MMSU Affiliated:</label></td>
@@ -241,7 +228,33 @@
                 <div v-else-if="contactInfo.mmsu_affiliated === 'No'">
                   <p>Office/Agency: <input type="text" v-model="contactInfo.officeAgency"></p>
                 </div>
-                                
+                <br>
+
+            <!-- Facility & Services Availed -->
+                      <h2 class="font-bold text-lg mb-4">Facility & Services Availed</h2>
+
+                      <!-- Facility -->
+                      <p>Facility Price for Current Month: {{ currentMonthFacilityPrice }}</p>
+                      
+
+                      <br>
+                      <!-- Services -->
+                      <h2 class="font-bold text-lg mb-4">Services:</h2>
+                      <ul>
+                        <li v-for="(selectedService, index) in getSelectedServices()" :key="index">
+                          {{ selectedService.service_name }} -
+                          <b>Quantity:</b> {{ selectedService.quantity }} |
+                          <b>Total Price:</b> {{ selectedService.total_price }}
+                        </li>
+                      </ul>
+                      <br>
+                      <p><b>Total Cost of Services Availed:</b> {{ totalCostOfServices }}</p>
+                                              <!-- Disclaimer -->
+
+                      <p class="mt-4 text-sm text-gray-600 ">
+                        <strong>Disclaimer:</strong> Prices may vary. This represents the facility price and total cost of services obtained. The final total will be included in the emailed form.
+                      </p>
+                                                        
 
               <br><hr>
 
@@ -270,6 +283,8 @@ import Footer from '../Components/Footer.vue';
 import Navbar from '../Components/Navbar.vue';
 
 import axios from 'axios';
+import Swal from 'sweetalert2'
+
 
 export default {
 
@@ -286,9 +301,10 @@ export default {
           endTime: '',
           event_name: '',
           participants: 0,
-          totalPrice: 0, // Ty maisave ta database kuma nga total? idk
-
+          currentMonthFacilityPrice: 'Not available',
           estimatedTotal: 0, //or etoy ti maisave ty estimation na haha
+
+          isConflict: false, // Flag to track conflict status
         
 
           services: [], // Fetch services from the backend and populate here
@@ -319,6 +335,43 @@ export default {
            
 //-------------------------------------------------------------------------------------//
 //-------------------------------------------------------------------------------------//
+
+
+
+          async validateConflict() {
+            if (!this.eventDateFrom || !this.eventDateTo || !this.startTime || !this.endTime) {
+              Swal.fire({
+                  title: "Oops!",
+                  text: "Please Select Time & Date",
+                  icon: "warning"
+                });
+              return;
+            }
+
+            try {
+              const response = await axios.get('/check-conflict', {
+                params: {
+                  eventDateFrom: this.eventDateFrom,
+                  eventDateTo: this.eventDateTo,
+                  startTime: this.startTime,
+                  endTime: this.endTime,
+                },
+              });
+
+              if (response.data.hasConflict) {
+                Swal.fire({
+                  title: "Oops! There's a Conflict!",
+                  text: "Please choose a different time slot.",
+                  icon: "warning"
+                });
+              } else {
+                this.nextStep();
+              }
+            } catch (error) {
+              console.error('Error checking conflict:', error);
+            }
+          },
+
 
             handleAffiliatedChange() {
               if (this.contactInfo.mmsu_affiliated === 'No') {
@@ -489,20 +542,95 @@ export default {
                             const response = await axios.get(`/list-facilities/${this.facilityId}`);
                             console.log(response.data); // Log the response to the console
                             this.selectedFacility = response.data;
+
+                            // Fetch pricing details for the selected facility
+                          const facilityId = this.selectedFacility.id; // Assuming selectedFacility has an 'id' property
+                          const pricingResponse = await axios.get(`/facility-pricing/${facilityId}`);
+                          console.log(pricingResponse.data); // Log the pricing details to the console
+                          this.facilityPrices = pricingResponse.data;
                         } catch (error) {
                             console.error('Error fetching facility details:', error);
                         }
                     },
-            },
+
+
+                    formatDate(date) {
+                  const year = date.getFullYear();
+                  const month = String(date.getMonth() + 1).padStart(2, "0");
+                  const day = String(date.getDate()).padStart(2, "0");
+                  return `${year}-${month}-${day}`;
+                },
+                          },
 
                         created() {
                             this.fetchFacilityDetails();
                             this.fetchServices();
                             },
-                        mounted() {
-                            this.fetchFacilityDetails();
-                            this.fetchServices();
-                            },
+
+
+     async mounted() {
+        this.fetchFacilityDetails();
+          this.fetchServices();
+
+              const self = this;
+
+                 // Get today's date
+                  const today = new Date();
+
+                  // Initialize Flatpickr for start date picker
+                            const startDatePicker = flatpickr("#startDatePicker", {
+                              dateFormat: "Y-m-d", // Customize date format as needed
+                              minDate: today, // Set minimum date as today
+                              onClose: selectedDates => {
+                                self.eventDateFrom = self.formatDate(selectedDates[0]);
+                                endDatePicker.set("minDate", selectedDates[0]); // Set minimum date for the end date picker
+                              },
+                              onChange: selectedDates => {
+                                if (selectedDates.length > 0) {
+                                  endDatePicker.set("minDate", selectedDates[0]);
+                                }
+                              },
+                            });
+
+                            // Initialize Flatpickr for end date picker
+                            const endDatePicker = flatpickr("#endDatePicker", {
+                              dateFormat: "Y-m-d", // Customize date format as needed
+                              minDate: today, // Set minimum date as today
+                              onClose: selectedDates => {
+                                self.eventDateTo = self.formatDate(selectedDates[0]);
+                              },
+                            });
+
+                // Fetch facility prices...
+                  try {
+                    const response = await axios.get(`/facility-pricing/${this.facilityId}`);
+                    const facilityPrices = response.data; // Assuming this is your fetched facility prices array
+
+                    const currentDate = new Date();
+                    const currentMonth = currentDate.getMonth() + 1; // Current month, considering January is 0
+
+                    // Find the facility price for the current month
+                    const currentFacilityPrice = facilityPrices.find(
+                      price => currentMonth >= price.monthFrom && currentMonth <= price.monthTo
+                    );
+
+                    if (currentFacilityPrice) {
+                      this.currentMonthFacilityPrice = currentFacilityPrice.amount;
+                    }
+                  } catch (error) {
+                    console.error('Error fetching facility details:', error);
+                  }
+
+          },
+
+              computed: {
+                totalCostOfServices() {
+                  // Calculate totalCostOfServices based on other data properties
+                  // e sum na lang dagity naiavail ta price HAHAHA 
+                  return this.getSelectedServices().reduce((total, service) => total + service.total_price, 0);
+                },
+            },
+
 
 }
 
@@ -537,5 +665,36 @@ export default {
       margin-top: 10px;
       cursor: pointer;
     }
+
+    .date-picker {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.date-input {
+  width: calc(50% - 10px); /* Adjust width as needed */
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px; /* Adjust font size as needed */
+  outline: none;
+}
+
+/* Additional styles for the custom date picker */
+.date-picker-calendar {
+  position: absolute;
+  z-index: 1000;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.date-picker-calendar.show {
+  display: block;
+}
     
 </style>

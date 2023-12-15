@@ -134,13 +134,7 @@ export default {
   },
 
   methods: {
-    // loadFacilities() {
-    //   axios.get('/list-facilities').then(response => {
-    //     this.facilities = response.data;
-    //   }).catch(error => {
-    //     console.error('Error fetching facilities:', error);
-    //   });
-    // },
+
     loadFacilities() {
         axios.get('/list-facilities').then(response => {
           this.facilities = response.data;

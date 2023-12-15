@@ -163,6 +163,8 @@ export default {
       axios.get('/load-admin-acilities') // Send a GET request to fetch admin-specific facilities
           .then(({ data }) => {
             this.facilities = data;
+
+            
           })
           .catch(error => {
             console.error('Error loading admin facilities:', error);

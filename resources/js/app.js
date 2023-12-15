@@ -10,6 +10,9 @@ import AdminFooter from './Components/Admin/AdminFooter.vue';
 import AdminDashboard from './Pages/Admin/AdminDashboard.vue';
 import Addfacilities from './Components/Admin/Addfacilities.vue';
 import ReviewForm from './Components/ReviewForm.vue';
+import FacilityImageSlider from './Components/FacilityImageSlider.vue';
+
+
 import '../css/app.css';
 import router from "./router"
 
@@ -28,7 +31,7 @@ app.component('AdminFooter', AdminFooter);
 app.component('AdminDashboard', AdminDashboard);
 app.component('Addfacilities', Addfacilities);
 app.component('ReviewForm', ReviewForm);
-
+app.component('RowCarousel', FacilityImageSlider);
 app.mount('#app');
 app.use(CKEditor);
 

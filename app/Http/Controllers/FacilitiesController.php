@@ -83,7 +83,7 @@ public function saveFacility(Request $request)
         $facility->description = $request->description;
         $facility->location = $request->location;
         $facility->capacity = $request->capacity;
-        $facility->tags = $request->tags;
+        $facility->tags = $request->tags; 
         $facility->save();
 
         return response()->json(['id' => $facility->id]);
@@ -155,7 +155,7 @@ public function saveFacility(Request $request)
        $facility = Facility::findOrFail($id);
        $facility->update($request->all());
        $facility->admin_id = Auth::id(); // Set the admin_id here
-    $facility->save();
+        $facility->save();
 
 
        return response()->json(['message' => 'Facility updated successfully']);
